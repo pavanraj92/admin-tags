@@ -1,0 +1,22 @@
+{
+    "name": "admin/tags",
+    "description": "Manage tags to categorize and organize content or products, allowing for better filtering and search capabilities.",
+    "type": "library",
+    "version": "1.0.0",  
+    "license": "MIT",
+    "autoload": {
+      "psr-4": {
+        "admin\\tags\\": "src/"
+      }
+    },
+    "extra": { 
+      "laravel": {
+        "providers": [
+          "admin\\tags\\TagServiceProvider"
+        ]
+      }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+  }
+  
