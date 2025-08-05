@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Config;
 use Kyslik\ColumnSortable\Sortable;
 use Illuminate\Support\Str;
+use admin\admin_auth\Models\Seo;
 
 class Tag extends Model
 {
@@ -65,6 +66,12 @@ class Tag extends Model
             if ($tag->isDirty('name')) {
                 $tag->slug = Str::slug($tag->name, '_');
             }
+        });
+
+         static::deleting(function ($page) {
+            Seo::where('model_name', self::class)
+                ->where('model_record_id', $page->id)
+                ->delete();
         });
     }
 

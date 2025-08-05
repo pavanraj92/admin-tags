@@ -14,6 +14,9 @@ class TagUpdateRequest extends FormRequest
         return [
             'name' => 'required|string|min:3|max:100|unique:tags,name,' . $this->route('tag')->id,            
             'status' => 'required|in:0,1',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_keywords' => 'nullable|string|max:500',
+            'meta_description' => 'nullable|string|max:500',
         ];
     }
 
