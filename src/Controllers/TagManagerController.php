@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 use admin\tags\Requests\TagCreateRequest;
 use admin\tags\Requests\TagUpdateRequest;
 use admin\tags\Models\Tag;
+use admin\admin_auth\Traits\HasSeo;
 
 class TagManagerController extends Controller
 {
+    use HasSeo;
+
     public function __construct()
     {
         $this->middleware('admincan_permission:tags_manager_list')->only(['index']);
@@ -49,7 +52,8 @@ class TagManagerController extends Controller
         try {
             $requestData = $request->validated();
 
-            Tag::create($requestData);
+            $tag = Tag::create($requestData);
+            $this->saveSeo(Tag::class, $tag->id, $requestData);
             return redirect()->route('admin.tags.index')->with('success', 'Tag created successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load tags: ' . $e->getMessage());
@@ -62,7 +66,8 @@ class TagManagerController extends Controller
     public function show(Tag $tag)
     {
         try {
-            return view('tag::admin.show', compact('tag'));
+            $seo = $this->getSeo($tag);
+            return view('tag::admin.show', compact('tag','seo'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load tags: ' . $e->getMessage());
         }
@@ -71,7 +76,8 @@ class TagManagerController extends Controller
     public function edit(Tag $tag)
     {
         try {
-            return view('tag::admin.createOrEdit', compact('tag'));
+            $seo = $this->getSeo($tag);
+            return view('tag::admin.createOrEdit', compact('tag','seo'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load tag for editing: ' . $e->getMessage());
         }
@@ -83,6 +89,7 @@ class TagManagerController extends Controller
             $requestData = $request->validated();
 
             $tag->update($requestData);
+            $this->saveSeo(Tag::class, $tag->id, $requestData);
             return redirect()->route('admin.tags.index')->with('success', 'Tag updated successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load tag for editing: ' . $e->getMessage());
