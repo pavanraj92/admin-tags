@@ -88,6 +88,11 @@ class Tag extends Model
             return $this->belongsToMany(\admin\products\Models\Product::class, 'product_tag');
         }
     }
+
+    public function scopeIsActive($query)
+    {
+        return $query->where('status', 1);
+    }
  
 }
 
