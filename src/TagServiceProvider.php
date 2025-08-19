@@ -32,6 +32,10 @@ class TagServiceProvider extends ServiceProvider
             $this->loadMigrationsFrom(base_path('Modules/Tags/database/migrations'));
         }
 
+        // Also merge config from published module if it exists
+        if (file_exists(base_path('Modules/Tags/config/tag.php'))) {
+            $this->mergeConfigFrom(base_path('Modules/Tags/config/tag.php'), 'tag.constants');
+        }
         // Only publish automatically during package installation, not on every request
         // Use 'php artisan tags:publish' command for manual publishing
         // $this->publishWithNamespaceTransformation();

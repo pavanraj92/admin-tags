@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name',100)->nullable();
             $table->string('slug',100)->nullable();
             $table->boolean('status')->nullable()->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

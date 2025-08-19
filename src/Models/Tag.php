@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Config;
 use Kyslik\ColumnSortable\Sortable;
 use Illuminate\Support\Str;
 use admin\admin_auth\Models\Seo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tag extends Model
 {
-    use HasFactory, Sortable;
+    use HasFactory, Sortable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
