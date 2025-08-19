@@ -3,6 +3,7 @@
 namespace admin\tags\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TagUpdateRequest extends FormRequest
 {
@@ -12,7 +13,15 @@ class TagUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:3|max:100|unique:tags,name,' . $this->route('tag')->id,            
+            'name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:100',
+                Rule::unique('tags', 'name')
+                    ->ignore($this->route('tag')->id) // or $this->tag->id
+                    ->whereNull('deleted_at'),
+            ],
             'status' => 'required|in:0,1',
             'meta_title' => 'nullable|string|max:255',
             'meta_keywords' => 'nullable|string|max:500',

@@ -3,6 +3,7 @@
 namespace admin\tags\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TagCreateRequest extends FormRequest
 {
@@ -12,7 +13,13 @@ class TagCreateRequest extends FormRequest
     public function rules(): array
     {
         return [                   
-            'name' => 'required|string|min:3|max:100|unique:tags,name',
+            'name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:100',
+                Rule::unique('tags', 'name')->whereNull('deleted_at'),
+            ],
             'status' => 'required|in:0,1',
             'meta_title' => 'nullable|string|max:255',
             'meta_keywords' => 'nullable|string|max:500',
