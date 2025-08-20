@@ -36,14 +36,19 @@
                                         <h5 class="mb-0 text-white font-bold">Tag Information</h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Name:</label>
-                                            <p>{{ $tag->name ?? 'N/A' }}</p>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">Slug:</label>
-                                            <p>{{ $tag->slug ?? 'N/A' }}</p>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="font-weight-bold">Name:</label>
+                                                    <p>{{ $tag->name ?? 'N/A' }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="font-weight-bold">Slug:</label>
+                                                    <p>{{ $tag->slug ?? 'N/A' }}</p>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="row">
