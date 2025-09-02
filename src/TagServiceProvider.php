@@ -62,11 +62,14 @@ class TagServiceProvider extends ServiceProvider
             
         $slug = $admin->website_slug ?? 'admin';
 
+        $routeFile = base_path('Modules/Tags/routes/web.php');
+        if (!file_exists($routeFile)) {
+            $routeFile = __DIR__ . '/routes/web.php'; // fallback to package route
+        }
+
         Route::middleware('web')
             ->prefix("{$slug}/admin") // dynamic prefix
-            ->group(function () {
-                $this->loadRoutesFrom(__DIR__.'/routes/web.php');
-            });
+            ->group($routeFile);
     }
 
     public function register()
