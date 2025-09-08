@@ -25,9 +25,9 @@ class TagServiceProvider extends ServiceProvider
             $this->mergeConfigFrom(base_path('Modules/Tags/config/tag.php'), 'tag.constants');
         } else {
             // Fallback to package config if published config doesn't exist
-            $this->mergeConfigFrom(__DIR__ . '/../config/tag.php', 'tag.constants');
+            $this->mergeConfigFrom(__DIR__.'/../config/tag.php', 'tag.constants');
         }
-
+        
         // Also register module views with a specific namespace for explicit usage
         if (is_dir(base_path('Modules/Tags/resources/views'))) {
             $this->loadViewsFrom(base_path('Modules/Tags/resources/views'), 'tags-module');
