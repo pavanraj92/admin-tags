@@ -40,16 +40,15 @@ class TagServiceProvider extends ServiceProvider
         // Only publish automatically during package installation, not on every request
         // Use 'php artisan tags:publish' command for manual publishing
         // $this->publishWithNamespaceTransformation();
-        
+
         // Standard publishing for non-PHP files
         $this->publishes([
             __DIR__ . '/../config/' => base_path('Modules/Tags/config/'),
             __DIR__ . '/../database/migrations' => base_path('Modules/Tags/database/migrations'),
             __DIR__ . '/../resources/views' => base_path('Modules/Tags/resources/views/'),
         ], 'tag');
-       
-        $this->registerAdminRoutes();
 
+        $this->registerAdminRoutes();
     }
 
     protected function registerAdminRoutes()
@@ -61,7 +60,7 @@ class TagServiceProvider extends ServiceProvider
         $admin = DB::table('admins')
             ->orderBy('created_at', 'asc')
             ->first();
-            
+
         $slug = $admin->website_slug ?? 'admin';
 
         $routeFile = base_path('Modules/Tags/routes/web.php');
@@ -96,14 +95,14 @@ class TagServiceProvider extends ServiceProvider
         $filesWithNamespaces = [
             // Controllers
             __DIR__ . '/../src/Controllers/TagManagerController.php' => base_path('Modules/Tags/app/Http/Controllers/Admin/TagManagerController.php'),
-            
+
             // Models
             __DIR__ . '/../src/Models/Tag.php' => base_path('Modules/Tags/app/Models/Tag.php'),
-            
+
             // Requests
             __DIR__ . '/../src/Requests/TagCreateRequest.php' => base_path('Modules/Tags/app/Http/Requests/TagCreateRequest.php'),
             __DIR__ . '/../src/Requests/TagUpdateRequest.php' => base_path('Modules/Tags/app/Http/Requests/TagUpdateRequest.php'),
-            
+
             // Routes
             __DIR__ . '/routes/web.php' => base_path('Modules/Tags/routes/web.php'),
         ];
@@ -112,13 +111,13 @@ class TagServiceProvider extends ServiceProvider
             if (File::exists($source)) {
                 // Create destination directory if it doesn't exist
                 File::ensureDirectoryExists(dirname($destination));
-                
+
                 // Read the source file
                 $content = File::get($source);
-                
+
                 // Transform namespaces based on file type
                 $content = $this->transformNamespaces($content, $source);
-                
+
                 // Write the transformed content to destination
                 File::put($destination, $content);
             }
@@ -136,12 +135,12 @@ class TagServiceProvider extends ServiceProvider
             'namespace admin\\tags\\Controllers;' => 'namespace Modules\\Tags\\app\\Http\\Controllers\\Admin;',
             'namespace admin\\tags\\Models;' => 'namespace Modules\\Tags\\app\\Models;',
             'namespace admin\\tags\\Requests;' => 'namespace Modules\\Tags\\app\\Http\\Requests;',
-            
+
             // Use statements transformations
             'use admin\\tags\\Controllers\\' => 'use Modules\\Tags\\app\\Http\\Controllers\\Admin\\',
             'use admin\\tags\\Models\\' => 'use Modules\\Tags\\app\\Models\\',
             'use admin\\tags\\Requests\\' => 'use Modules\\Tags\\app\\Http\\Requests\\',
-            
+
             // Class references in routes
             'admin\\tags\\Controllers\\TagManagerController' => 'Modules\\Tags\\app\\Http\\Controllers\\Admin\\TagManagerController',
         ];
@@ -176,16 +175,22 @@ class TagServiceProvider extends ServiceProvider
             'use Modules\\Tags\\app\\Models\\Tag;',
             $content
         );
-        
+
         $content = str_replace(
             'use admin\\tags\\Requests\\TagCreateRequest;',
             'use Modules\\Tags\\app\\Http\\Requests\\TagCreateRequest;',
             $content
         );
-        
+
         $content = str_replace(
             'use admin\\tags\\Requests\\TagUpdateRequest;',
             'use Modules\\Tags\\app\\Http\\Requests\\TagUpdateRequest;',
+            $content
+        );
+
+        $content = str_replace(
+            'use admin\admin_auth\Traits\HasSeo;',
+            'use Modules\\AdminAuth\\app\\Traits\\HasSeo;',
             $content
         );
 
@@ -198,6 +203,11 @@ class TagServiceProvider extends ServiceProvider
     protected function transformModelNamespaces($content)
     {
         // Any model-specific transformations
+        $content = str_replace(
+            'use admin\admin_auth\Models\Seo;',
+            'use Modules\\AdminAuth\\app\\Models\\Seo;',
+            $content
+        );
         return $content;
     }
 
