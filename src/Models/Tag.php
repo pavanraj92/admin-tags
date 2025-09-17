@@ -83,17 +83,9 @@ class Tag extends Model
             : 10;
     }
 
-    public function products()
-    {
-        if (class_exists(\admin\products\Models\Product::class)) {
-            return $this->belongsToMany(\admin\products\Models\Product::class, 'product_tag');
-        }
-    }
-
     public function scopeIsActive($query)
     {
         return $query->where('status', 1);
     }
  
 }
-
